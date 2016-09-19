@@ -1,0 +1,6 @@
+0000.002 () Opened log file at time: Sat, 10 Sep 2016 08:32:51 +0000 on http://123.206.62.239
+0000.002 () UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.12.20 WP: 4.6.1 PHP: 5.5.29 (Linux VM_64_83_centos 2.6.32-431.el6.x86_64 #1 SMP Fri Nov 22 03:15:09 UTC 2013 x86_64) MySQL: 5.6.26 WPLANG: en_US Server: Apache/2.4.12 (Unix) OpenSSL/1.0.1e-fips safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 21.7M | 22.3M) multisite: N openssl: OpenSSL 1.0.1e-fips 11 Feb 2013 mcrypt: Y LANG:  ZipArchive::addFile: Y
+0000.002 () Free space on disk containing Updraft's temporary directory: 17169.3 MB
+0000.002 () Restore failed...
+0000.002 () Error message: Backup information not found
+0000.002 () Restore failed

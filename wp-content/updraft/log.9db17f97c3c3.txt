@@ -1,0 +1,26 @@
+0000.002 () Opened log file at time: Sat, 10 Sep 2016 08:29:53 +0000 on http://123.206.62.239
+0000.002 () UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.12.20 WP: 4.6.1 PHP: 5.5.29 (Linux VM_64_83_centos 2.6.32-431.el6.x86_64 #1 SMP Fri Nov 22 03:15:09 UTC 2013 x86_64) MySQL: 5.6.26 WPLANG: en_US Server: Apache/2.4.12 (Unix) OpenSSL/1.0.1e-fips safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 21.7M | 22M) multisite: N openssl: OpenSSL 1.0.1e-fips 11 Feb 2013 mcrypt: Y LANG:  ZipArchive::addFile: Y
+0000.002 () Free space on disk containing Updraft's temporary directory: 17171.8 MB
+0000.003 () Restore job started. Entities to restore: plugins, themes, uploads, others. Restore options: {"updraft_restorer_replacesiteurl":false,"updraft_encryptionphrase":"","updraft_restorer_wpcore_includewpconfig":false}
+0002.399 () Entity: plugins
+0002.399 () restore_backup(backup_file=backup_2016-09-10-0825_Cactus_22644e87d7de-plugins.zip, type=plugins, info=a:2:{s:4:"path";s:40:"/yjdata/www/wordpress/wp-content/plugins";s:11:"description";s:7:"Plugins";}, last_one=)
+0002.420 () Unpacking backup... (backup_2016-09-10-0825_Cactus_22644e87d7de-plugins.zip, 5.3 Mb)
+0195.658 () Moving old data: filesystem method / updraft_dir is potentially possible
+0195.665 () Moving old data: can potentially use wp_filesystem method / -old
+0195.665 () Moving old data out of the way...
+0196.085 () Top-level entities being moved: index.php, wp-mail-smtp, updraftplus, akismet
+0196.089 () Error message: Could not move the files into place. Check your file permissions.
+0196.089 () Error data (move_failed): /yjdata/www/wordpress/wp-content/plugins/updraftplus -> /yjdata/www/wordpress/wp-content/updraft/plugins-old/updraftplus
+0196.089 () plugins: /wp-content/plugins: deleting contents (as attempts to copy failed)
+0207.962 () Moving unpacked backup into place...
+0217.507 () Top-level entities being moved: akismet, index.php, updraftplus, wp-mail-smtp
+0217.516 () PHP event: code E_NOTICE: Undefined index: /wp-content/plugins/ (line 264, wp-admin/includes/class-wp-filesystem-ftpext.php)
+0217.750 () PHP event: code E_NOTICE: Undefined index: /wp-content/plugins/ (line 264, wp-admin/includes/class-wp-filesystem-ftpext.php)
+0217.759 () PHP event: code E_WARNING: ftp_rename(): Rename failed. (line 305, wp-admin/includes/class-wp-filesystem-ftpext.php)
+0217.759 () Failed to move file (check your file permissions and disk quota): /wp-content/upgrade/0e05f01e/plugins/updraftplus/admin.php -&gt; /wp-content/plugins/updraftplus/admin.php
+0217.762 () Error message: Could not move the files into place. Check your file permissions.
+0217.762 () Error data (move_failed): (2) /wp-content/upgrade/0e05f01e/plugins/updraftplus -> /wp-content/plugins/updraftplus
+0217.762 () Restore failed...
+0217.762 () Error message: Could not move the files into place. Check your file permissions.
+0217.762 () Error data (move_failed): (2) /wp-content/upgrade/0e05f01e/plugins/updraftplus -> /wp-content/plugins/updraftplus
+0217.762 () Restore failed

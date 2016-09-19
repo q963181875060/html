@@ -1,0 +1,648 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Post Types Order\n"
+"POT-Creation-Date: 2016-07-13 10:42+0200\n"
+"PO-Revision-Date: 2016-07-13 10:42+0200\n"
+"Last-Translator: nsp-code <electronice_delphi@yahoo.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: conflicts/wp-simple-firewall.php:82
+msgid ""
+"<b>Conflict notice</b>: The Security Firewall - Login Protection use the "
+"Rename WP Login Page functionality which is the same as WP Hide - Admin "
+"Login Url change.  "
+msgstr ""
+
+#: include/functions.class.php:221
+msgid ""
+"W3 Total Cache Plugin is active, make sure you clear the cache for new "
+"changes to apply"
+msgstr ""
+
+#: include/functions.class.php:225
+msgid ""
+"WP Super Cache Plugin is active, make sure you clear the cache for new "
+"changes to apply"
+msgstr ""
+
+#: include/functions.class.php:1436
+#, php-format
+msgid "The %1$s plugin header is deprecated. Use %2$s instead."
+msgstr ""
+
+#: include/functions.class.php:1642
+msgid ""
+"Help us to improve this plugin by sending any improvement suggestions and "
+"reporting any issues at "
+msgstr ""
+
+#: include/functions.class.php:1643
+msgid ""
+"Did you find this plugin useful? Please support our work by spread the word "
+"about this, or write an article about the plugin in your blog with a link to "
+"development site"
+msgstr ""
+
+#: include/wph.class.php:265
+msgid "Are you sure to reset all settings? All options will be removed."
+msgstr ""
+
+#: include/wph.class.php:303
+msgid ""
+"Permalink is required to be turned ON for WP Hide & Security Enhancer to work"
+msgstr ""
+
+#: include/wph.class.php:313 include/wph.class.php:333
+msgid ""
+"Unable to write custom rules to your .htaccess. Is this file writable? <br /"
+">No mod is being applied."
+msgstr ""
+
+#: include/wph.class.php:316 include/wph.class.php:336
+msgid ""
+"Unable to write custom rules to your web.config. Is this file writable? <br /"
+">No mod is being applied."
+msgstr ""
+
+#: include/wph.class.php:322
+msgid "All Settings where restored to default"
+msgstr ""
+
+#: include/wph.class.php:338
+msgid "Settings saved"
+msgstr ""
+
+#: modules/module-admin.php:44
+msgid "Admin"
+msgstr ""
+
+#: modules/module-admin.php:56
+msgid "WP Hide & Security Enhancer - Admin"
+msgstr ""
+
+#: modules/module-general.php:56
+msgid "General / Html"
+msgstr ""
+
+#: modules/module-general.php:68
+msgid "WP Hide & Security Enhancer - General / Html"
+msgstr ""
+
+#: modules/module-rewrite.php:64 modules/module-rewrite.php:75
+msgid "Rewrite"
+msgstr ""
+
+#: modules/module-rewrite.php:75
+msgid "WP Hide & Security Enhancer"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:16
+msgid "Create a new admin url instead default /wp-admin and /login."
+msgstr ""
+
+#: modules/components/admin-admin_url.php:17
+msgid "Write down your new admin url, or if lost, will not be able to log-in."
+msgstr ""
+
+#: modules/components/admin-admin_url.php:17
+msgid "An e-mail will be sent to"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:17
+msgid "with the new Login URL"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:18
+#: modules/components/admin-new_wp_login_php.php:18
+msgid ""
+"If unable to access the login / admin section anymore, use the Recovery Link "
+"which reset links to default: "
+msgstr ""
+
+#: modules/components/admin-admin_url.php:31
+msgid "Block default admin url and files from being accesible."
+msgstr ""
+
+#: modules/components/admin-admin_url.php:35
+#: modules/components/admin-new_wp_login_php.php:34
+#: modules/components/general-headers.php:20
+#: modules/components/general-headers.php:37
+#: modules/components/general-html.php:19
+#: modules/components/general-html.php:35
+#: modules/components/general-html.php:51
+#: modules/components/general-meta.php:20
+#: modules/components/general-meta.php:36
+#: modules/components/general-meta.php:53
+#: modules/components/general-meta.php:69
+#: modules/components/general-meta.php:87
+#: modules/components/general-meta.php:103
+#: modules/components/general-meta.php:119
+#: modules/components/general-scripts.php:19
+#: modules/components/general-styles.php:19
+#: modules/components/general-styles.php:35
+#: modules/components/general-wpemoji.php:19
+#: modules/components/general-wpemoji.php:35
+#: modules/components/rewrite-new_include_path.php:32
+#: modules/components/rewrite-new_plugin_path.php:33
+#: modules/components/rewrite-new_theme_path.php:51
+#: modules/components/rewrite-new_theme_path.php:104
+#: modules/components/rewrite-new_upload_path.php:33
+#: modules/components/rewrite-new_xml-rpc-path.php:32
+#: modules/components/rewrite-new_xml-rpc-path.php:49
+#: modules/components/rewrite-new_xml-rpc-path.php:66
+#: modules/components/rewrite-root-files.php:32
+#: modules/components/rewrite-root-files.php:57
+#: modules/components/rewrite-root-files.php:73
+#: modules/components/rewrite-root-files.php:89
+#: modules/components/rewrite-root-files.php:105
+#: modules/components/rewrite-root-files.php:121
+#: modules/components/rewrite-root-files.php:138
+#: modules/components/rewrite-slash.php:19
+#: modules/components/rewrite-wp_content_path.php:34
+msgid "Yes"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:36
+#: modules/components/admin-new_wp_login_php.php:35
+#: modules/components/general-headers.php:21
+#: modules/components/general-headers.php:38
+#: modules/components/general-html.php:20
+#: modules/components/general-html.php:36
+#: modules/components/general-html.php:52
+#: modules/components/general-meta.php:21
+#: modules/components/general-meta.php:37
+#: modules/components/general-meta.php:54
+#: modules/components/general-meta.php:70
+#: modules/components/general-meta.php:88
+#: modules/components/general-meta.php:104
+#: modules/components/general-meta.php:120
+#: modules/components/general-scripts.php:20
+#: modules/components/general-styles.php:20
+#: modules/components/general-styles.php:36
+#: modules/components/general-wpemoji.php:20
+#: modules/components/general-wpemoji.php:36
+#: modules/components/rewrite-new_include_path.php:33
+#: modules/components/rewrite-new_plugin_path.php:34
+#: modules/components/rewrite-new_theme_path.php:52
+#: modules/components/rewrite-new_theme_path.php:105
+#: modules/components/rewrite-new_upload_path.php:34
+#: modules/components/rewrite-new_xml-rpc-path.php:33
+#: modules/components/rewrite-new_xml-rpc-path.php:50
+#: modules/components/rewrite-new_xml-rpc-path.php:67
+#: modules/components/rewrite-root-files.php:33
+#: modules/components/rewrite-root-files.php:58
+#: modules/components/rewrite-root-files.php:74
+#: modules/components/rewrite-root-files.php:90
+#: modules/components/rewrite-root-files.php:106
+#: modules/components/rewrite-root-files.php:122
+#: modules/components/rewrite-root-files.php:139
+#: modules/components/rewrite-slash.php:20
+#: modules/components/rewrite-wp_content_path.php:35
+msgid "No"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:201
+msgid "Hello"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:202
+msgid ""
+"This is an automated message to inform that your login url has been changed "
+"at"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:203
+msgid "The new login url is"
+msgstr ""
+
+#: modules/components/admin-admin_url.php:204
+msgid "Additionality you can use this to recover the old login / admin links "
+msgstr ""
+
+#: modules/components/admin-admin_url.php:205
+msgid "Please keep this url safe for recover, if forgot"
+msgstr ""
+
+#: modules/components/admin-new_wp_login_php.php:16
+msgid ""
+"Map a new wp-login.php instead default. This also need to include <i>.php</"
+"i> extension."
+msgstr ""
+
+#: modules/components/admin-new_wp_login_php.php:17
+msgid ""
+"Make sure your log-in url is not already modified by another plugin or "
+"theme. In such case, you should disable other code and take advantage of "
+"these features. More details at "
+msgstr ""
+
+#: modules/components/admin-new_wp_login_php.php:30
+msgid "Block default wp-login.php file from being accesible."
+msgstr ""
+
+#: modules/components/general-headers.php:15
+msgid "Remove X-Powered-By Header if being set."
+msgstr ""
+
+#: modules/components/general-headers.php:16
+#: modules/components/general-headers.php:33
+msgid "More details at "
+msgstr ""
+
+#: modules/components/general-headers.php:32
+msgid "Remove X-Pingback Header if being set."
+msgstr ""
+
+#: modules/components/general-html.php:15
+msgid ""
+"Remove all HTML Comments which usualy specify Plugins Name and Versio. Any "
+"Internet Exploreer conditional tags are preserved."
+msgstr ""
+
+#: modules/components/general-html.php:31
+msgid "Remove ID attribute from all menu items."
+msgstr ""
+
+#: modules/components/general-html.php:47
+msgid ""
+"Remove class attribute from all menu items. Any classes which include a "
+"\"current\" prefix or contain \"has-children\" will be preserved."
+msgstr ""
+
+#: modules/components/general-meta.php:16
+msgid ""
+"Remove the autogenerated meta generator tag within head (WordPress Version)."
+msgstr ""
+
+#: modules/components/general-meta.php:32
+msgid "Remove the wlwmanifest tag within head."
+msgstr ""
+
+#: modules/components/general-meta.php:49
+msgid "Remove the feed_links tag within head."
+msgstr ""
+
+#: modules/components/general-meta.php:65
+msgid "Remove the rsd_link tag within head."
+msgstr ""
+
+#: modules/components/general-meta.php:83
+msgid "Remove the adjacent_posts_rel tag within head."
+msgstr ""
+
+#: modules/components/general-meta.php:99
+msgid "Remove profile link meta tag within head."
+msgstr ""
+
+#: modules/components/general-meta.php:115
+msgid "Remove canonical link meta tag within head."
+msgstr ""
+
+#: modules/components/general-scripts.php:15
+msgid "Remove version number from enqueued script files."
+msgstr ""
+
+#: modules/components/general-styles.php:15
+msgid "Remove version number from enqueued style files."
+msgstr ""
+
+#: modules/components/general-styles.php:31
+msgid "Remove ID attribute from all link tags which include a stylesheet."
+msgstr ""
+
+#: modules/components/general-wpemoji.php:15
+msgid "Disable the Emoji icon library from being loaded."
+msgstr ""
+
+#: modules/components/general-wpemoji.php:31
+msgid "Disable the TinyMC Emoji icons library from being loaded into TinyMC."
+msgstr ""
+
+#: modules/components/rewrite-new_include_path.php:15
+msgid "New Includes Path"
+msgstr ""
+
+#: modules/components/rewrite-new_include_path.php:16
+#: modules/components/rewrite-new_theme_path.php:17
+#: modules/components/rewrite-new_theme_path.php:72
+msgid "The default theme path is set to"
+msgstr ""
+
+#: modules/components/rewrite-new_include_path.php:17
+#: modules/components/rewrite-new_plugin_path.php:17
+#: modules/components/rewrite-new_theme_path.php:18
+#: modules/components/rewrite-new_theme_path.php:73
+#: modules/components/rewrite-new_upload_path.php:17
+#: modules/components/rewrite-wp_content_path.php:16
+msgid "More details can be found at"
+msgstr ""
+
+#: modules/components/rewrite-new_include_path.php:19
+msgid "e.g. my_includes"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:15
+msgid "New Plugins Path"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:16
+msgid "The default plugins path is set to"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:28
+msgid "Block plugins URL"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:29
+msgid "Block plugins files from being accesible through default urls."
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:29
+#: modules/components/rewrite-root-files.php:28
+msgid "Apply only if "
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:29
+#: modules/components/rewrite-new_upload_path.php:29
+#: modules/components/rewrite-root-files.php:28
+msgid "is not empty."
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:65
+msgid "New Path for"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:65
+msgid "plugin"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:66
+msgid "This setting overwrite the"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:66
+msgid "New Plugin Path"
+msgstr ""
+
+#: modules/components/rewrite-new_plugin_path.php:66
+msgid "setting for this plugin, if set."
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:16
+msgid "New Theme Path"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:20
+msgid "e.g. my_template"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:30
+msgid "New Style File Path"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:31
+#: modules/components/rewrite-new_theme_path.php:85
+msgid "The default theme style file style.css path is set to"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:32
+#: modules/components/rewrite-new_theme_path.php:86
+msgid ""
+"If style file contain relative URLs it should not include additional path, "
+"just the actual filename."
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:32
+#: modules/components/rewrite-new_theme_path.php:86
+msgid "More details at"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:35
+#: modules/components/rewrite-new_theme_path.php:88
+msgid "e.g. custom-style-file.css"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:45
+msgid "Remove description header from Style file"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:46
+#: modules/components/rewrite-new_theme_path.php:99
+msgid ""
+"Strip out all meta data from style file e.g. Theme Name, Theme URI, Author "
+"etc. Those are important information to find out possible theme security "
+"breaches."
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:47
+#: modules/components/rewrite-new_theme_path.php:100
+msgid ""
+"This feature may not work if style file url not available on html (being "
+"concatenated)."
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:71
+msgid "Child - New Theme Path"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:75
+msgid "e.g. my_child_template"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:84
+msgid "Child - New Style File Path"
+msgstr ""
+
+#: modules/components/rewrite-new_theme_path.php:98
+msgid "Child - Remove description header from Style file"
+msgstr ""
+
+#: modules/components/rewrite-new_upload_path.php:15
+msgid "New Uploads Path"
+msgstr ""
+
+#: modules/components/rewrite-new_upload_path.php:16
+msgid "The default uploads path is set to"
+msgstr ""
+
+#: modules/components/rewrite-new_upload_path.php:19
+msgid "e.g. my_uploads"
+msgstr ""
+
+#: modules/components/rewrite-new_upload_path.php:28
+msgid "Block uploads URL"
+msgstr ""
+
+#: modules/components/rewrite-new_upload_path.php:29
+msgid "Block upload files from being accesible through default urls."
+msgstr ""
+
+#: modules/components/rewrite-new_upload_path.php:29
+msgid ""
+"If set to Yes, all new images inserted into posts will use the new Upload "
+"Url, as old url become blocked. Using the No, new images inesrted will use "
+"old url, which however are being updated on front side. This may be helpfull "
+"on plugin disable, so image urls can be accessible as before."
+msgstr ""
+
+#: modules/components/rewrite-new_upload_path.php:29
+msgid "Apply only if"
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:15
+msgid "New XML-RPC Path"
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:16
+msgid ""
+"The default XML-RPC path is set to xmlrpc.php. If not used you can leave "
+"empty and block the service using the following area."
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:18
+msgid "e.g. my-xml-rpc.php"
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:27
+msgid "Block default xmlrpc.php"
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:28
+msgid ""
+"XML-RPC gives others the ability to talk to your WordPress site. If not used "
+"you should disable. Keep in mind that some plugins like Jetpack use this API."
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:44
+msgid "Disable XML-RPC authentication"
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:45
+msgid ""
+"Filter whether XML-RPC methods requiring authentication, such as for "
+"publishing purposes, are enabled."
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:61
+msgid "Remove pingback"
+msgstr ""
+
+#: modules/components/rewrite-new_xml-rpc-path.php:62
+msgid "Remove pingback link tag from theme."
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:15
+msgid "New wp-comments-post.php Path"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:16
+msgid "The default path is set to wp-comments-post.php"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:27
+msgid "Block wp-comments-post.php"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:28
+msgid "Block default wp-comments-post.php."
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:52
+msgid "Block license.txt"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:53
+msgid "Block access to license.txt root file"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:68
+msgid "Block readme.html"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:69
+msgid "Block access to readme.html root file"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:84
+msgid "Block wp-activate.php"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:85
+msgid ""
+"Block access to wp-activate.php file. This file confirms that the activation "
+"key that is sent in an email after a user signs up for a new blog matches "
+"the key for that user. If <b>anyone can register</b> on your site, you shold "
+"keep this off."
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:100
+msgid "Block wp-cron.php"
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:101
+msgid ""
+"Block access to wp-cron.php file. If remote cron calls not being used this "
+"can be set to Yes."
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:117
+msgid ""
+"Block default wp-signup.php file. If <b>anyone can register</b> on your "
+"site, you shold keep this off."
+msgstr ""
+
+#: modules/components/rewrite-root-files.php:134
+msgid ""
+"Block other wp-*.php files. E.g. wp-blog-header.php, wp-config.php, wp-cron."
+"php. Those files are used internally, blocking those will not affect any "
+"functionality. Other root files (wp-activate.php, wp-login.php, wp-signup."
+"php) are ignored, they can be controlled through own setting."
+msgstr ""
+
+#: modules/components/rewrite-slash.php:14
+msgid "URL's add Slash"
+msgstr ""
+
+#: modules/components/rewrite-slash.php:15
+msgid ""
+"Add an end slash to any links without. This disguise any existance uppon a "
+"file, folder or a wrong url, they will be all slashed."
+msgstr ""
+
+#: modules/components/rewrite-slash.php:15
+msgid ""
+"On certain systems this can produce a small lag measured in milliseconds."
+msgstr ""
+
+#: modules/components/rewrite-wp_content_path.php:14
+msgid "New Content Path"
+msgstr ""
+
+#: modules/components/rewrite-wp_content_path.php:15
+msgid "Your default wp-content path is set to"
+msgstr ""
+
+#: modules/components/rewrite-wp_content_path.php:18
+msgid "e.g. my_content"
+msgstr ""
+
+#: modules/components/rewrite-wp_content_path.php:28
+msgid "Block wp-content URL"
+msgstr ""
+
+#: modules/components/rewrite-wp_content_path.php:29
+msgid "Block default content path. Your default wp-content path is set to"
+msgstr ""
+
+#: modules/components/rewrite-wp_content_path.php:30
+msgid ""
+"Apply only if <b>New Content Path</b> is not empty. It block only for non "
+"loged-in users."
+msgstr ""

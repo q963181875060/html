@@ -1,0 +1,46 @@
+0000.002 () Opened log file at time: Sat, 10 Sep 2016 08:27:24 +0000 on http://123.206.62.239
+0000.002 () UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.12.20 WP: 4.6.1 PHP: 5.5.29 (Linux VM_64_83_centos 2.6.32-431.el6.x86_64 #1 SMP Fri Nov 22 03:15:09 UTC 2013 x86_64) MySQL: 5.6.26 WPLANG: en_US Server: Apache/2.4.12 (Unix) OpenSSL/1.0.1e-fips safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 21.7M | 22M) multisite: N openssl: OpenSSL 1.0.1e-fips 11 Feb 2013 mcrypt: Y LANG:  ZipArchive::addFile: Y
+0000.002 () Free space on disk containing Updraft's temporary directory: 17168.1 MB
+0000.003 () Restore job started. Entities to restore: plugins, themes, uploads, others, db. Restore options: {"updraft_restorer_replacesiteurl":false,"updraft_encryptionphrase":"","updraft_restorer_wpcore_includewpconfig":false}
+0000.213 () Entity: db
+0000.213 () restore_backup(backup_file=backup_2016-09-10-0825_Cactus_22644e87d7de-db.gz, type=db, info=a:0:{}, last_one=)
+0000.242 () Unpacking backup...
+0017.351 () Database successfully unpacked
+0017.351 () Restoring the database (on a large site this can take a long time - if it times out (which can happen if your web hosting company has configured your hosting to limit resources) then you should use a different method, such as phpMyAdmin)...
+0017.351 () Using direct MySQL access; value of use_mysqli is: 1
+0018.521 () Tried to raise max_allowed_packet from 4 MB to 32 MB, but failed (Access denied; you need (at least one of) the SUPER privilege(s) for this operation, b:0;)
+0018.521 () Max packet size: 4 MB
+0018.521 () Entering maintenance mode
+0018.530 () Enabling Maintenance mode&#8230;
+0018.535 () <strong>Backup of:</strong> http://123.206.62.239
+0018.536 () Content URL: http://123.206.62.239/wp-content
+0018.536 () Uploads URL: http://123.206.62.239/wp-content/uploads
+0018.536 () Old table prefix: wp_
+0018.536 () Site information: multisite=0
+0018.538 () New table prefix: wp_
+0018.539 () Restoring table (MyISAM): wp_options
+0018.643 () Restoring prior UD configuration (table: wp_options; keys: 3)
+0018.650 () Restoring table (MyISAM): wp_users
+0018.716 () Restoring table (MyISAM): wp_usermeta
+0018.769 () Restoring table (MyISAM): wp_commentmeta
+0018.819 () Restoring table (MyISAM): wp_comments
+0018.838 () Restoring table (MyISAM): wp_links
+0018.898 () Restoring table (MyISAM): wp_postmeta
+0018.922 () Restoring table (MyISAM): wp_posts
+0018.973 () Restoring table (MyISAM): wp_term_relationships
+0019.020 () Restoring table (MyISAM): wp_term_taxonomy
+0019.096 () Restoring table (MyISAM): wp_termmeta
+0019.130 () Restoring table (MyISAM): wp_terms
+0019.191 () Unlocking database and leaving maintenance mode
+0019.202 () Disabling Maintenance mode&#8230;
+0019.204 () Finished: lines processed: 42 in 1.82 seconds
+0019.205 () Cleaning up rubbish...
+0019.213 () Entity: plugins
+0019.213 () restore_backup(backup_file=backup_2016-09-10-0825_Cactus_22644e87d7de-plugins.zip, type=plugins, info=a:2:{s:4:"path";s:40:"/yjdata/www/wordpress/wp-content/plugins";s:11:"description";s:7:"Plugins";}, last_one=)
+0019.226 () Unpacking backup... (backup_2016-09-10-0825_Cactus_22644e87d7de-plugins.zip, 5.3 Mb)
+0180.784 () Error message: Could not copy file.
+0180.784 () Error data (copy_failed_ziparchive): plugins/updraftplus/vendor/aws/aws-sdk-php/src/Aws/S3/Command/S3Command.php
+0180.784 () Restore failed...
+0180.784 () Error message: Could not copy file.
+0180.784 () Error data (copy_failed_ziparchive): plugins/updraftplus/vendor/aws/aws-sdk-php/src/Aws/S3/Command/S3Command.php
+0180.784 () Restore failed
