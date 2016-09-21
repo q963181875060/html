@@ -79,24 +79,26 @@ function wpse120418_unregister_categories() {
 }
 add_action( 'init', 'wpse120418_unregister_categories' );
 
-function ya_do_it_admin_bar_remove() {
-        global $wp_admin_bar;
-
-        /* **edit-profile is the ID** */
-        $wp_admin_bar->remove_menu('edit-profile');
- }
-
-add_action('wp_before_admin_bar_render', 'ya_do_it_admin_bar_remove', 0);
 
 function wpdocs_remove_logo_comments( $wp_admin_bar ) {
     // Remove wp-logo and comments from the menu bar.
     $wp_admin_bar->remove_node( 'wp-logo' );  
     $wp_admin_bar->remove_node( 'new-media' );
-    $wp_admin_bar->remove_menu('my-account'); // Removes 'Howdy, username' and Menu Items
+   // $wp_admin_bar->remove_menu('my-account'); // Removes 'Howdy, username' and Menu Items
 }
 add_action( 'admin_bar_menu', 'wpdocs_remove_logo_comments', 999 );
 
 
+add_action('admin_head','admin_css');
+function admin_css()
+{
+if(!current_user_can('administrator'))//not and admin
+{
+    echo '<style>';
+        echo '.update_nag{display:none}';
+        echo '</style>';
+    }
+}
 /******owen***********
 
 

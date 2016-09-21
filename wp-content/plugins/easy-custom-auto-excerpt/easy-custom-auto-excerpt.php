@@ -309,7 +309,7 @@ function ecae_premium_notice()
     /* Check that the user hasn't already clicked to ignore the message & if premium not installed */
     if (! $is_ignore_notice  && ! function_exists("is_ecae_premium_exist"))
     {
-        echo '<div class="updated"><p>';
+     /*   echo '<div class="updated"><p>';
 
         printf(__('Get 40+ read more button style, %1$s Get Easy Custom Auto Excerpt Premium ! %2$s Do not bug me again %3$s Not Now %4$s',TONJOO_ECAE),
             '<a href="http://wpexcerptplugin.com" target="_blank">',
@@ -318,6 +318,7 @@ function ecae_premium_notice()
             '</a></span>');
 
         echo "</p></div>";
+	*/
     }
 }
 

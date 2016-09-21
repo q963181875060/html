@@ -11,7 +11,7 @@
 register_activation_hook(__FILE__, 'recommand_owen_activation');
 
 $no_recommand_login_days = 7;
-$time_for_recommand = 21;
+$time_for_recommand = 18;
 
 function recommand_owen_activation() {
 	global $time_for_recommand;
@@ -20,9 +20,11 @@ function recommand_owen_activation() {
 	if($cur_time < time()){
 	   $cur_time += 24 * 60 * 60;
 	}
-    if (! wp_next_scheduled ( 'recommand_owen_event' )) {
+    if (!wp_next_scheduled ( 'recommand_owen_event' )) {
 		wp_schedule_event($cur_time, 'daily', 'recommand_owen_event');
     }
+	//wp_schedule_event($cur_time, 'daily', 'recommand_owen_event');
+	
 }
 
 add_action('recommand_owen_event', 'recommand_owen_method');
@@ -114,8 +116,8 @@ function recommand_owen_method() {
 			$match_map[$master->ID . "," . $candidate->ID]["time"] = time();
 			$match_map[$candidate->ID . "," . $master->ID]["history_matched_amount"]++;
 			$match_map[$candidate->ID . "," . $master->ID]["time"] = $match_map[$master->ID . "," . $candidate->ID]["time"];
-			$master->recommand1 = $master->recommand1 . "为您配对：" . $candidate->display_name . " 联系方式：" . $candidate->contact . " 个人主页:www.xrzwg.cn?author=" . $candidate->ID;
-			$candidate->recommand1 = $candidate->recommand1 . "为您配对：" .  $master->display_name . " 联系方式：" . $master->contact . " 个人主页:www.xrzwg.cn?author=" . $master->ID;
+			$master->recommand1 = $master->recommand1 . "为你配对：" . $candidate->display_name . " 联系方式：" . $candidate->contact . " 个人主页:www.xrzwg.cn?author=" . $candidate->ID;
+			$candidate->recommand1 = $candidate->recommand1 . "为你配对：" .  $master->display_name . " 联系方式：" . $master->contact . " 个人主页:www.xrzwg.cn?author=" . $master->ID;
 			$wpdb->insert( 
 				'wp_recommand_owen', 
 				array( 
@@ -157,20 +159,20 @@ function is_pare_match($master, $candidate){
 	
 function is_pare_match_part($master, $candidate){
 	foreach($master->tend as $tendation){        
-		if($tendation == "男主"){
-			if($candidate->gender[0] == "男" && ($candidate->property[0] == "主" || $candidate->property[0] == "主和奴均可")){
+		if($tendation == "男王"){
+			if($candidate->gender[0] == "男" && ($candidate->property[0] == "王" || $candidate->property[0] == "王和奴均可")){
 				return 1;
 			}
 		}else if($tendation == "男奴"){
-			if($candidate->gender[0] == "男" && ($candidate->property[0] == "奴" || $candidate->property[0] == "主和奴均可")){
+			if($candidate->gender[0] == "男" && ($candidate->property[0] == "奴" || $candidate->property[0] == "王和奴均可")){
 				return 1;
 			}
-		}else if($tendation == "女主"){
-			if($candidate->gender[0] == "女" && ($candidate->property[0] == "主" || $candidate->property[0] == "主和奴均可")){
+		}else if($tendation == "女王"){
+			if($candidate->gender[0] == "女" && ($candidate->property[0] == "王" || $candidate->property[0] == "王和奴均可")){
 				return 1;
 			}
 		}else if($tendation == "女奴"){
-			if($candidate->gender[0] == "女" && ($candidate->property[0] == "奴" || $candidate->property[0] == "主和奴均可")){
+			if($candidate->gender[0] == "女" && ($candidate->property[0] == "奴" || $candidate->property[0] == "王和奴均可")){
 				return 1;
 			}
 		}
