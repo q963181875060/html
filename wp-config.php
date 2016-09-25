@@ -32,6 +32,7 @@ define('DB_PASSWORD', 'jb7DnmP3MqWr');
 
 /** MySQL主机 */
 define('DB_HOST', 'localhost');
+define('WEB_HOST','www.xrzwg.cn');
 
 /** 创建数据表时默认的文字编码 */
 define('DB_CHARSET', 'utf8mb4');
@@ -87,6 +88,7 @@ define('WP_DEBUG', true);
  * 如需禁用，请移除或注释掉本行。
  */
 define('WP_ZH_CN_ICP_NUM', true);
+define('DISABLE_WP_CRON', true);
 
 /* 好了！请不要再继续编辑。请保存本文件。使用愉快！ */
 

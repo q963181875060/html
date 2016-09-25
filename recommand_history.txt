@@ -1,0 +1,1 @@
+Could not open input file: /yjdata/www/wordpress/phpinfo.php
