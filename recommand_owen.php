@@ -3,9 +3,9 @@ require_once(dirname(__FILE__) . '/wp-config.php');
 header("Content-type: text/html; charset=utf-8"); 
 
 
-/*
-Parameters could be changed
-*/
+
+//Parameters could be changed
+
 //how many days not login, no recommmand for the user
 $no_recommand_login_days = 7;
 $threshold_for_super_recommand = 5;
@@ -18,7 +18,7 @@ $mysqli = new mysqli(constant('DB_HOST'),constant('DB_USER'),constant('DB_PASSWO
 if ($mysqli->connect_errno) {
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
-/* change character set to utf8 */
+// change character set to utf8 
 if (!$mysqli->set_charset("utf8")) {
     printf("Error loading character set utf8: %s\n", $mysqli->error);
 }
@@ -79,10 +79,20 @@ foreach($potential_super_recommand_user_ids as $id){
 	if($should_be_update == 1){
 		//update match_amount
 		$mysqli->query("update wp_usermeta set meta_value = '{$user_map[$id]['match_amount']}' where user_id={$id} and meta_key='match_amount'");
-	}
-	
+	}	
 }
 
+// Disable the is_match_on if not login for some days
+$res = $mysqli->query("select * from wp_usermeta where meta_key='_um_last_login'");
+$cur_time = time();
+while($row = $res->fetch_assoc()){
+	if($cur_time - $row['meta_value'] > $no_recommand_login_days * 24 * 60 * 60){
+		update_is_match_on_db($row['user_id'], "a:1:{i:0;s:3:\"否\";}");
+	}
+}
+$res->close();
+
+// Check the match history
 $res = $mysqli->query("select * from wp_recommand_owen");
 
 //how many matches have been made for a user and a candidatei
@@ -98,21 +108,21 @@ while($match = $res->fetch_object()){
 }
 $res->close();
 
+
 foreach($user_map as $key=>$user){
 	$user_map[$key] = (object)$user;
 }
 
+ksort($user_map);
+
+
+
+//First Round Match: same city
 foreach($user_map as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
-		$master->recommandee = "王国已停止为你配对";
-		update_recommand_db($master);
 		continue;
 	}
-	if(time() - $master->_um_last_login > $no_recommand_login_days * 24 * 60 * 60){
-		$master->recommandee = "由于连续".$no_recommand_login_days."天未登录而停止配对，欢迎回来，从今晚开始继续为你匹配";
-		update_recommand_db($master);
-		continue;
-	}
+	
 	if(!isset($master->match_amount)){
 		$master->match_amount = 1;
 	}
@@ -128,13 +138,15 @@ foreach($user_map as $master){
 		if(!isset($candidate->match_amount)){
 			$candidate->match_amount = 1;
 		}
-		if((isset($candidate->is_match_on) && strpos($candidate->is_match_on,"否") != false) || time() - $candidate->_um_last_login > $no_recommand_login_days * 24 * 60 * 60 || $candidate->ID == $master->ID){
+		if((isset($candidate->is_match_on) && strpos($candidate->is_match_on,"否") != false) || $candidate->ID == $master->ID){
 			continue;
 		}
-		if(!is_pare_match($master, $candidate)){
-			continue;
-		}
+		
 		if($cur_num_match_map[$candidate->ID] >= $candidate->match_amount) continue;
+
+		if(!is_pare_match($master, $candidate, 1)){
+			continue;
+		}
 		
 		if(!array_key_exists($master->ID . "," . $candidate->ID, $match_map)){
 			$match_map[$master->ID . "," . $candidate->ID] = array("history_matched_amount"=>0, "time"=>0);
@@ -156,13 +168,82 @@ foreach($user_map as $master){
 	// SORT_ASC是升序，降序请使用SORT_DESC
 	array_multisort($tmp_match_amount, SORT_ASC, $tmp_gender, SORT_DESC, $tmp_time, SORT_ASC, $master_match_array);
 	
-	if(count($master_match_array) == 0){
-		$master->recommandee = "暂时找不到和你同城的匹配对象，请确认资料填写是否正确，明日将继续匹配";
-		update_recommand_db($master);
-	}else{
-		// make the match
+	$tmp_match_amount = 0;
+	
+	while(($cur_num_match_map[$master->ID] < $master->match_amount) && ($tmp_match_amount < count($master_match_array))){
+		$candidate =$user_map[$master_match_array[$tmp_match_amount]["candidate_id"]];
+		$cur_num_match_map[$master->ID]++;
+		$cur_num_match_map[$candidate->ID]++;
 		
-		$candidate =$user_map[$master_match_array[0]["candidate_id"]];
+		$match_map[$master->ID . "," . $candidate->ID]["history_matched_amount"]++;
+		$match_map[$master->ID . "," . $candidate->ID]["time"] = time();
+		$match_map[$candidate->ID . "," . $master->ID]["history_matched_amount"]++;
+		$match_map[$candidate->ID . "," . $master->ID]["time"] = $match_map[$master->ID . "," . $candidate->ID]["time"];
+		
+		$master->recommandee = $master->recommandee . "<a style='color:#3ba1da' href='?author={$candidate->ID}'>{$candidate->display_name}</a>   联系方式：{$candidate->contact} <br/>";
+		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?author={$master->ID}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
+		
+		$time = time();
+		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
+		
+		update_recommand_db($master);
+		update_recommand_db($candidate);
+		
+		$tmp_match_amount++;
+	}
+}
+
+//Second Round Match: may not same city
+foreach($user_map as $master){
+	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
+		continue;
+	}
+
+	if(!isset($master->match_amount)){
+		$master->match_amount = 1;
+	}
+	//if already matched enough users this time
+	if($cur_num_match_map[$master->ID] >= $master->match_amount){
+		continue;
+	}
+	//$master_match_array stores all the potential matched users
+	$master_match_array = array();
+	foreach($user_map as $candidate){	
+		if(!isset($candidate->match_amount)){
+			$candidate->match_amount = 1;
+		}
+		if((isset($candidate->is_match_on) && strpos($candidate->is_match_on,"否") != false) || $candidate->ID == $master->ID){
+			continue;
+		}
+		if($cur_num_match_map[$candidate->ID] >= $candidate->match_amount) continue;
+
+		if(!is_pare_match($master, $candidate, 0)){
+			continue;
+		}
+		
+		if(!array_key_exists($master->ID . "," . $candidate->ID, $match_map)){
+			$match_map[$master->ID . "," . $candidate->ID] = array("history_matched_amount"=>0, "time"=>0);
+			$match_map[$candidate->ID . "," . $master->ID] = array("history_matched_amount"=>0, "time"=>0);
+		}
+		$master_match_array[] = array("candidate_id" => $candidate->ID, "history_matched_amount" => $match_map[$master->ID . "," . $candidate->ID]["history_matched_amount"], 
+			"time" => $match_map[$master->ID . "," . $candidate->ID]["time"], "gender" => $candidate->gender);
+	}
+	
+	$tmp_match_amount = array();
+	$tmp_gender = array();
+	$tmp_time = array();
+	foreach ($master_match_array as $candidate) {
+		$tmp_match_amount[] = $candidate["history_matched_amount"];
+		$tmp_gender[] = $candidate["gender"];
+		$tmp_time[] = $candidate["time"];
+	}
+	
+	// SORT_ASC是升序，降序请使用SORT_DESC
+	array_multisort($tmp_match_amount, SORT_ASC, $tmp_gender, SORT_DESC, $tmp_time, SORT_ASC, $master_match_array);
+	
+	$tmp_match_amount = 0;
+	while($cur_num_match_map[$master->ID] < $master->match_amount && $tmp_match_amount < count($master_match_array)){
+		$candidate =$user_map[$master_match_array[$tmp_match_amount]["candidate_id"]];
 		$cur_num_match_map[$master->ID]++;
 		$cur_num_match_map[$candidate->ID]++;
 		$match_map[$master->ID . "," . $candidate->ID]["history_matched_amount"]++;
@@ -179,18 +260,53 @@ foreach($user_map as $master){
 		update_recommand_db($master);
 		update_recommand_db($candidate);
 		
-	
+		$tmp_match_amount++;
 	}
 }
-echo time() . "<br/>";
+
+// Third Round : update the message for members with no recommand
+$lack_array = array("男王"=>0, "男奴"=>0, "女王"=>0, "女奴"=>0);
+foreach($user_map as $master){
+	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
+		$master->recommandee = $master->recommandee . "已停止配对，请在个人资料中重新开启配对<br/>";
+		update_recommand_db($master);
+		continue;
+	}
+	//if matched not enough users this time
+	if($cur_num_match_map[$master->ID] < $master->match_amount){
+		$master->recommandee = $master->recommandee . "暂未找到配对对象，王国已提高你明天的优先级</br>";
+		update_recommand_db($master);
+		
+		$tendation = $master->tendation;
+		if(strpos($tendation,"男王") != false){
+			$lack_array["男王"]++;
+		}else if(strpos($tendation,"男奴") != false){
+			$lack_array["男奴"]++;
+		}else if(strpos($tendation,"女王") != false){
+			$lack_array["女王"]++;
+		}else if(strpos($tendation, "女奴") != false){
+			$lack_array["女奴"]++;
+		}
+		
+		continue;
+	}
+}
+
+echo date("Y-m-d H:i:s",time()) . " 缺少:";
+foreach($lack_array as $key=>$val){
+	echo $key . " " . $val . ", ";
+}
+echo "<br/>";
 
 mysqli_close($mysqli);
 
-function is_pare_match($master, $candidate){
+function is_pare_match($master, $candidate, $is_city_same){
 	//if candidate match the requirement of master
+	$res_city = isset($candidate->city) && isset($master->city) && trim($master->city) != "" && trim($master->city) == trim($candidate->city);
+	if($is_city_same == 1 && $res_city == false) return false;
 	
-	$res = isset($candidate->city) && isset($master->city) && trim($master->city) != "" && trim($master->city) == trim($candidate->city);
-	return $res && is_pare_match_part($master, $candidate) && is_pare_match_part($candidate, $master);
+	$res_meta = is_pare_match_part($master, $candidate) && is_pare_match_part($candidate, $master);
+	return $is_city_same == 1 ? ($res_meta && $res_city) : $res_meta;
 }
 	
 function is_pare_match_part($master, $candidate){
@@ -218,7 +334,7 @@ function is_pare_match_part($master, $candidate){
 	return 0;
 }
 
-//why insert recommandee fail?!
+
 function update_recommand_db($user){
 	global $mysqli;
 	$res = $mysqli->query("select * from wp_usermeta where user_id={$user->ID} and meta_key='recommandee'");
@@ -228,13 +344,11 @@ function update_recommand_db($user){
 	$recommandee_str = 'recommandee';
 	if($res_num < 1){
 		if ($stmt = $mysqli->prepare("insert into wp_usermeta (user_id, meta_key, meta_value) values (?,?,?)")) {
-			/* bind parameters for markers */
 			$stmt->bind_param("iss", $user->ID, $recommandee_str, $user->recommandee);
-			/* execute query */
 			$stmt->execute();
 			$stmt->close();
 		}else{
-			echo "{$user->display_name}} insert fail";
+			echo "{$user->display_name}} insert recommand fail";
 		}
 		
 		//$mysqli->query("insert into wp_usermeta (user_id, meta_key, meta_value) values ({$user->ID}, 'recommandee', '{}')");
@@ -242,17 +356,38 @@ function update_recommand_db($user){
 		//echo "insert " . $user->ID . "  " . $q . "<br/>";
 	}else{
 		if ($stmt = $mysqli->prepare("update wp_usermeta set meta_value = ? where user_id= ? and meta_key= ?")) {
-			/* bind parameters for markers */
 			$stmt->bind_param("sis", $user->recommandee, $user->ID, $recommandee_str);
-			/* execute query */
 			$stmt->execute();
 			$stmt->close();
 		}else{
-			echo "{$user->display_name}} update fail";
+			echo "{$user->display_name}} update recommand fail";
 		}
 		//$mysqli->query("update wp_usermeta set meta_value = '{$recommand_str}' where user_id={$user->ID} and meta_key='recommandee'");
 	}
-	
 }
 
+function update_is_match_on_db($user_id, $val){
+	global $mysqli;
+	$res = $mysqli->query("select * from wp_usermeta where user_id={$user_id} and meta_key='is_match_on'");
+	$res_num = $res->num_rows;
+	$res->close();
+	
+	if($res_num < 1){
+		if ($stmt = $mysqli->prepare("insert into wp_usermeta (user_id, meta_key, meta_value) values (?,'is_match_on',?)")) {
+			$stmt->bind_param("is", $user_id, $val);
+			$stmt->execute();
+			$stmt->close();
+		}else{
+			echo "{$user_id}} insert is_match_on fail";
+		}
+	}else{
+		if ($stmt = $mysqli->prepare("update wp_usermeta set meta_value = ? where user_id= ? and meta_key= 'is_match_on'")) {
+			$stmt->bind_param("si", $val, $user_id);
+			$stmt->execute();
+			$stmt->close();
+		}else{
+			echo "{$user_id}} update is_match_on fail";
+		}
+	}
+}
 
