@@ -162,7 +162,6 @@ foreach($user_map as $master){
 		$match_map[$master->ID . "," . $candidate->ID]["time"] = time();
 		$match_map[$candidate->ID . "," . $master->ID]["history_matched_amount"]++;
 		$match_map[$candidate->ID . "," . $master->ID]["time"] = $match_map[$master->ID . "," . $candidate->ID]["time"];
-		$WEB_HOST = constant('WEB_HOST');
 		
 		$master->recommandee = $master->recommandee . "<a style='color:#3ba1da' href='?author={$candidate->ID}'>{$candidate->display_name}</a>   联系方式：{$candidate->contact} <br/>";
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?author={$master->ID}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";

@@ -3,7 +3,7 @@
 Plugin Name: WP Meta and date remover
 Plugin URI: mailto:prasadkirpekar@outlook.com
 Description: Remove Meta information such as Author and Date from posts and pages.
-Version: 1.2.1
+Version: 1.2.2
 Author: Prasad Kirpekar
 Author URI: http://twitter.com.com/kirpekarprasad
 License: GPL v2

@@ -99,6 +99,24 @@ if(!current_user_can('administrator'))//not and admin
         echo '</style>';
     }
 }
+
+// Remove tags support from posts
+function myprefix_unregister_tags() {
+    unregister_taxonomy_for_object_type('post_tag', 'post');
+}
+add_action('init', 'myprefix_unregister_tags');
+
+// Remove post number at the back end
+add_filter( 'views_edit-post', 'wpse149143_edit_posts_views' );
+function wpse149143_edit_posts_views( $views ) {
+  if(!current_user_can('administrator'))//not and admin
+  { 
+    foreach ( $views as $index => $view ) {
+        $views[ $index ] = preg_replace( '/ <span class="count">\([0-9]+\)<\/span>/', '', $view );
+    }
+  }
+  return $views;
+}
 /******owen***********
 
 

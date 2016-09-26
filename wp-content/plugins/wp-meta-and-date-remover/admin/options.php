@@ -1,8 +1,9 @@
-
 <div class='wrap'>
 <h2>WP meta and Date Remover<span style="float:right;text-decoration:underline;"><a href="http://bit.ly/2bzAUb6">Buy Premium support</a>
 <br/>
 <a href="https://wordpress.org/support/view/plugin-reviews/wp-meta-and-date-remover?rate=5#postform">Vote up this plugin</a>
+<br/>
+</a>
 </span></h2>
 
 <form method='post' action=<?php echo $action_url ?>>
@@ -25,7 +26,7 @@
 	<td><?php submit_button(); ?></td>
 	<td></td>
 </tr>
-
+<tr><td><a href="https://prasadkirpekar.wordpress.com/2016/09/25/how-to-remove-additional-meta-text-from-posts-or-pages/" target="_blank">Addtional Text like <i>By</i> or <i>posted by</i> is still visible?</a></td><tr>
 </table>
 </form>
 

@@ -3,8 +3,8 @@ Contributors: Prasad Kirpekar
 Donate link: -
 Tags: free,theme,meta,date,author, website, posts, pages, metadata, post, home page, remover, entry-meta, css,front page
 Requires at least: 3.0.1
-Tested up to: 4.5
-Stable tag: 1.2.1
+Tested up to: 4.6.1
+Stable tag: 1.2.2
 stable.
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,8 @@ Use built in automatic installer or,
 3. After activation
 
 == Changelog ==
+1.2.2
+* Minor Improvments
 1.2.1
 * Minor Improvments.
 1.2.0
