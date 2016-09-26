@@ -106,16 +106,52 @@ function myprefix_unregister_tags() {
 }
 add_action('init', 'myprefix_unregister_tags');
 
+
+
 // Remove post number at the back end
-add_filter( 'views_edit-post', 'wpse149143_edit_posts_views' );
-function wpse149143_edit_posts_views( $views ) {
-  if(!current_user_can('administrator'))//not and admin
-  { 
-    foreach ( $views as $index => $view ) {
-        $views[ $index ] = preg_replace( '/ <span class="count">\([0-9]+\)<\/span>/', '', $view );
+add_filter('wp_count_posts', 'wpse149143_wp_count_posts', 10, 3);
+
+/**
+ * Modify returned post counts by status for the current post type.
+ *  Only retrieve counts of own items for users without rights to 'edit_others_posts'
+ *
+ * @since   26 June 2014
+ * @version 26 June 2014
+ * @author  W. van Dam
+ *
+ * @notes   Based on wp_count_posts (wp-includes/posts.php)
+ *
+ * @param object $counts An object containing the current post_type's post
+ *                       counts by status.
+ * @param string $type   Post type.
+ * @param string $perm   The permission to determine if the posts are 'readable'
+ *                       by the current user.
+ * 
+ * @return object Number of posts for each status
+ */
+function wpse149143_wp_count_posts( $counts, $type, $perm ) {
+    global $wpdb;
+
+    // We only want to modify the counts shown in admin and depending on $perm being 'readable' 
+    if ( ! is_admin() || 'readable' !== $perm ) {
+        return $counts;
     }
-  }
-  return $views;
+
+    // Only modify the counts if the user is not allowed to edit the posts of others
+    $post_type_object = get_post_type_object($type);
+    if (current_user_can( $post_type_object->cap->edit_others_posts ) ) {
+        return $counts;
+    }
+
+    $query = "SELECT post_status, COUNT( * ) AS num_posts FROM {$wpdb->posts} WHERE post_type = %s AND (post_author = %d) GROUP BY post_status";
+    $results = (array) $wpdb->get_results( $wpdb->prepare( $query, $type, get_current_user_id() ), ARRAY_A );
+    $counts = array_fill_keys( get_post_stati(), 0 );
+
+    foreach ( $results as $row ) {
+        $counts[ $row['post_status'] ] = $row['num_posts'];
+    }
+
+    return (object) $counts;
 }
 /******owen***********
 
