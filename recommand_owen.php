@@ -1,5 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/wp-config.php');
+header("Content-type: text/html; charset=utf-8"); 
+
 
 /*
 Parameters could be changed
@@ -16,6 +18,11 @@ $mysqli = new mysqli(constant('DB_HOST'),constant('DB_USER'),constant('DB_PASSWO
 if ($mysqli->connect_errno) {
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
+/* change character set to utf8 */
+if (!$mysqli->set_charset("utf8")) {
+    printf("Error loading character set utf8: %s\n", $mysqli->error);
+}
+
 if(!$mysqli->query("use " . constant('DB_NAME'))){
 	echo $mysqli->error;
 }

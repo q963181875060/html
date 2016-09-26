@@ -153,6 +153,13 @@ function wpse149143_wp_count_posts( $counts, $type, $perm ) {
 
     return (object) $counts;
 }
+
+// Remove remember me at the login page
+add_action('login_head', 'remove_remember_me');
+function remove_remember_me()
+{        
+    echo '<style type="text/css">.forgetmenot { display:none; } #nav{ display:none; } </style>';
+}
 /******owen***********
 
 
