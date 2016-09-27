@@ -13,8 +13,6 @@ $super_recommand_match_amount = 2;
 $super_recommand_duration_days = 15;
 
 $mysqli = new mysqli(constant('DB_HOST'),constant('DB_USER'),constant('DB_PASSWORD'), constant('DB_NAME'));
-
-
 if ($mysqli->connect_errno) {
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
@@ -300,7 +298,8 @@ foreach($user_array as $master){
 	}
 }
 
-echo date("Y-m-d H:i:s",time()) . " 缺少:";
+date_default_timezone_set('Asia/Shanghai');
+echo date("Y-m-d H:i:s") . " 缺少:";
 foreach($lack_array as $key=>$val){
 	echo $key . " " . $val . ", ";
 }
