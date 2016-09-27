@@ -109,16 +109,24 @@ while($match = $res->fetch_object()){
 $res->close();
 
 
+// Rank the users depending on the number of post
+$res = $mysqli->query("select post_author, count(*) count from wp_posts where post_status='publish' and post_type='post' group by post_author");
+$user_array = array();
+while($row = $res->fetch_assoc()){
+	$user_map[$row["post_author"]]["post_num"] = $row["count"];
+}
 foreach($user_map as $key=>$user){
+	if(!isset($user["post_num"])){
+		$user["post_num"] = 0;
+	}
+	$user_array[$user["post_num"]] = (object)$user;
 	$user_map[$key] = (object)$user;
 }
-
-ksort($user_map);
-
-
+krsort($user_array);
+$res->close();
 
 //First Round Match: same city
-foreach($user_map as $master){
+foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
 		continue;
 	}
@@ -194,7 +202,7 @@ foreach($user_map as $master){
 }
 
 //Second Round Match: may not same city
-foreach($user_map as $master){
+foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
 		continue;
 	}
@@ -266,7 +274,7 @@ foreach($user_map as $master){
 
 // Third Round : update the message for members with no recommand
 $lack_array = array("男王"=>0, "男奴"=>0, "女王"=>0, "女奴"=>0);
-foreach($user_map as $master){
+foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
 		$master->recommandee = $master->recommandee . "已停止配对，请在个人资料中重新开启配对<br/>";
 		update_recommand_db($master);
