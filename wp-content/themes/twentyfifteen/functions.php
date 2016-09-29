@@ -160,6 +160,44 @@ function remove_remember_me()
 {        
     echo '<style type="text/css">.forgetmenot { display:none; } #nav{ display:none; } </style>';
 }
+
+// Restrict the number of male and female members
+function myplugin_restrict_registration($user_id) {
+  global $wpdb;
+  $gender_res = $wpdb->get_results("select * from wp_usermeta where meta_key='gender'", "object");
+  $is_match_on_res = $wpdb->get_results("select * from wp_usermeta where meta_key='is_match_on'", "object");
+
+  $is_match_on_map = array();
+  foreach($is_match_on_res as $match){
+	  $is_match_on_map[$match->user_id] = $match->meta_value;
+  }
+  
+  $male_num = 0;
+  $female_num = 0;
+  foreach($gender_res as $gender){
+	  if(array_key_exists($gender->user_id, $is_match_on_map) && strpos($is_match_on_map[$gender->user_id], "否") != false){
+		  //do nothing
+	  }else{
+		  if(strpos($gender->meta_value, "男") != false){
+				$male_num++;
+			}else{
+				$female_num++;
+			}
+	  }
+  }
+  
+  $is_limit_on = false;
+  if($female_num >= 50 && $male_num > $female_num*2){
+	$is_limit_on = true;  
+  }
+  if($is_limit_on && $_POST['gender'][0]=="男"){
+	  require_once(ABSPATH.'wp-admin/includes/user.php' );
+	  wp_delete_user($user_id);
+	  wp_redirect("?page_id=151");
+	  exit;
+  }
+}
+add_action( 'user_register', 'myplugin_restrict_registration', 1, 1);
 /******owen***********
 
 
