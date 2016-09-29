@@ -1,6 +1,6 @@
 wp-config.php
 recommand_history.html
-uploads/
+wp-content/uploads/
 .user.ini
 wflogs/
 functions.php
