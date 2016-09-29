@@ -192,9 +192,8 @@ foreach($user_array as $master){
 		$match_map[$master->ID . "," . $candidate->ID]["time"] = time();
 		$match_map[$candidate->ID . "," . $master->ID]["history_matched_amount"]++;
 		$match_map[$candidate->ID . "," . $master->ID]["time"] = $match_map[$master->ID . "," . $candidate->ID]["time"];
-		
-		$master->recommandee = $master->recommandee . "<a style='color:#3ba1da' href='?author={$candidate->ID}'>{$candidate->display_name}</a>   联系方式：{$candidate->contact} <br/>";
-		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?author={$master->ID}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
+		$master->recommandee = $master->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$candidate->user_login}'>{$candidate->display_name}</a>   联系方式：{$candidate->contact} <br/>";
+		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
 		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
@@ -264,8 +263,8 @@ foreach($user_array as $master){
 		$match_map[$candidate->ID . "," . $master->ID]["history_matched_amount"]++;
 		$match_map[$candidate->ID . "," . $master->ID]["time"] = $match_map[$master->ID . "," . $candidate->ID]["time"];
 		
-		$master->recommandee = $master->recommandee . "<a style='color:#3ba1da' href='?author={$candidate->ID}'>{$candidate->display_name}</a>   联系方式：{$candidate->contact} <br/>";
-		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?author={$master->ID}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
+		$master->recommandee = $master->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$candidate->user_login}'>{$candidate->display_name}</a>   联系方式：{$candidate->contact} <br/>";
+		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
 		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
