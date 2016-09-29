@@ -109,19 +109,26 @@ $res->close();
 
 // Rank the users depending on the number of post
 $res = $mysqli->query("select post_author, count(*) count from wp_posts where post_status='publish' and post_type='post' group by post_author");
-$user_array = array();
+$tmp_user_array = array();
 while($row = $res->fetch_assoc()){
 	$user_map[$row["post_author"]]["post_num"] = $row["count"];
 }
+$tmp_sort_array = array();
 foreach($user_map as $key=>$user){
 	if(!isset($user["post_num"])){
 		$user["post_num"] = 0;
 	}
-	$user_array[$user["post_num"]] = (object)$user;
+	$tmp_user_array[] = $user;
+	$tmp_sort_array[] = $user["post_num"];
 	$user_map[$key] = (object)$user;
 }
-krsort($user_array);
+array_multisort($tmp_sort_array, SORT_DESC, $tmp_user_array);
 $res->close();
+
+$user_array = array();
+foreach($tmp_user_array as $user){
+	$user_array[] = (object)$user;
+}
 
 //First Round Match: same city
 foreach($user_array as $master){
@@ -297,6 +304,7 @@ foreach($user_array as $master){
 		continue;
 	}
 }
+clear_um_cache();
 
 date_default_timezone_set('Asia/Shanghai');
 echo date("Y-m-d H:i:s") . " 缺少:";
@@ -379,7 +387,7 @@ function update_is_match_on_db($user_id, $val){
 	$res_num = $res->num_rows;
 	$res->close();
 	
-	if($res_num < 1){
+	if($res_num < 1){		
 		if ($stmt = $mysqli->prepare("insert into wp_usermeta (user_id, meta_key, meta_value) values (?,'is_match_on',?)")) {
 			$stmt->bind_param("is", $user_id, $val);
 			$stmt->execute();
@@ -398,3 +406,7 @@ function update_is_match_on_db($user_id, $val){
 	}
 }
 
+function clear_um_cache(){
+	global $mysqli;
+	$mysqli->query("delete from wp_options where option_name like 'um_cache_userdata_%'");
+}
