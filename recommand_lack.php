@@ -60,7 +60,7 @@ foreach($potential_super_recommand_user_ids as $id){
 	if(!isset($user_map[$id]['super_recommand_start_time'])){
 			$user_map[$id]['match_amount'] = $super_recommand_match_amount;
 			$user_map[$id]['super_recommand_start_time'] = time();
-			$mysqli->query("insert into wp_usermeta (user_id, meta_key, meta_value) values ({$id}, 'super_recommand_start_time', '{$user_map[$id]['super_recommand_start_time']}')");
+			//$mysqli->query("insert into wp_usermeta (user_id, meta_key, meta_value) values ({$id}, 'super_recommand_start_time', '{$user_map[$id]['super_recommand_start_time']}')");
 			$should_be_update = 1;
 	}else{
 		if(time() - $user_map[$id]['super_recommand_start_time'] > $super_recommand_duration_days * 24 * 60 * 60){
@@ -197,10 +197,10 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
-		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
+		//$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
-		update_recommand_db($master);
-		update_recommand_db($candidate);
+		//update_recommand_db($master);
+		//update_recommand_db($candidate);
 		
 		$tmp_match_amount++;
 	}
@@ -268,10 +268,10 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
-		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
+		//$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
-		update_recommand_db($master);
-		update_recommand_db($candidate);
+		//update_recommand_db($master);
+		//update_recommand_db($candidate);
 		
 		$tmp_match_amount++;
 	}
@@ -281,14 +281,14 @@ foreach($user_array as $master){
 $lack_array = array("男王"=>0, "男奴"=>0, "女王"=>0, "女奴"=>0);
 foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
-		$master->recommandee = $master->recommandee . "已停止配对，请在个人资料中重新开启配对<br/>";
-		update_recommand_db($master);
+		//$master->recommandee = $master->recommandee . "已停止配对，请在个人资料中重新开启配对<br/>";
+		//update_recommand_db($master);
 		continue;
 	}
 	//if matched not enough users this time
 	if($cur_num_match_map[$master->ID] < $master->match_amount){
 		$master->recommandee = $master->recommandee . "暂未找到配对对象，王国已提高你明天的优先级</br>";
-		update_recommand_db($master);
+		//update_recommand_db($master);
 		
 		$tendation = $master->tendation;
 		if(strpos($tendation,"男王") != false){
@@ -304,7 +304,7 @@ foreach($user_array as $master){
 		continue;
 	}
 }
-clear_um_cache();
+//clear_um_cache();
 
 date_default_timezone_set('Asia/Shanghai');
 echo date("Y-m-d H:i:s") . " 缺少:";
