@@ -7,10 +7,11 @@ header("Content-type: text/html; charset=utf-8");
 //Parameters could be changed
 
 //how many days not login, no recommmand for the user
-$no_recommand_login_days = 7;
+$no_recommand_login_days = 3;
 $threshold_for_super_recommand = 5;
 $super_recommand_match_amount = 2;
 $super_recommand_duration_days = 15;
+$low_bound_resource_num = 3;
 
 $mysqli = new mysqli(constant('DB_HOST'),constant('DB_USER'),constant('DB_PASSWORD'), constant('DB_NAME'));
 if ($mysqli->connect_errno) {
@@ -77,7 +78,7 @@ foreach($potential_super_recommand_user_ids as $id){
 	}
 	if($should_be_update == 1){
 		//update match_amount
-		$mysqli->query("update wp_usermeta set meta_value = '{$user_map[$id]['match_amount']}' where user_id={$id} and meta_key='match_amount'");
+		//$mysqli->query("update wp_usermeta set meta_value = '{$user_map[$id]['match_amount']}' where user_id={$id} and meta_key='match_amount'");
 	}	
 }
 
@@ -86,7 +87,32 @@ $res = $mysqli->query("select * from wp_usermeta where meta_key='_um_last_login'
 $cur_time = time();
 while($row = $res->fetch_assoc()){
 	if($cur_time - $row['meta_value'] > $no_recommand_login_days * 24 * 60 * 60){
-		update_is_match_on_db($row['user_id'], "a:1:{i:0;s:3:\"否\";}");
+		if(strpos($user_map[$row['user_id']]['is_match_on'],"否") != false){
+			//do nothing
+		}else{
+			$user_map[$row['user_id']]['is_match_on'] = "a:1:{i:0;s:3:\"否\";}";
+			update_is_match_on_db($row['user_id'], "a:1:{i:0;s:3:\"否\";}");
+		}
+		
+	}
+}
+$res->close();
+
+// Disable the male is_match_on if not contribute more than {$low_bound_resource_num} resources
+$res = $mysqli->query("select wdt_column_2, count(*) count from wp_wpdatatable_1 group by wdt_column_2");
+$potential_legal_ids = array();
+while($row = $res->fetch_assoc()){
+	if($row['count'] >= $low_bound_resource_num){
+		if(array_key_exists($row['wdt_column_2'], $user_map_key_name)){
+			$potential_legal_ids[$user_map_key_name[$row['wdt_column_2']]['ID']] = 1;
+		}
+	}
+}
+
+foreach($user_map as $key=>$user){
+	if(strpos($user['gender'],"男") != false && (!isset($user['is_match_on']) || strpos($user['is_match_on'],"是") != false) && !array_key_exists($key, $potential_legal_ids)){
+		$user_map[$key]['is_match_on'] = "a:1:{i:0;s:3:\"否\";}";
+		//update_is_match_on_db($key, "a:1:{i:0;s:3:\"否\";}");
 	}
 }
 $res->close();
@@ -131,12 +157,13 @@ foreach($tmp_user_array as $user){
 	$user_array[] = (object)$user;
 }
 
+
 //First Round Match: same city
 foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
 		continue;
 	}
-	
+		
 	if(!isset($master->match_amount)){
 		$master->match_amount = 1;
 	}
@@ -197,10 +224,11 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
+		//echo "({$master->display_name}, {$candidate->display_name}})<br/>";
 		//$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
-		//update_recommand_db($master);
-		//update_recommand_db($candidate);
+		update_recommand_db($master);
+		update_recommand_db($candidate);
 		
 		$tmp_match_amount++;
 	}
@@ -268,10 +296,11 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
+		//echo "({$master->display_name}, {$candidate->display_name})<br/>";
 		//$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
-		//update_recommand_db($master);
-		//update_recommand_db($candidate);
+		update_recommand_db($master);
+		update_recommand_db($candidate);
 		
 		$tmp_match_amount++;
 	}
@@ -281,30 +310,30 @@ foreach($user_array as $master){
 $lack_array = array("男王"=>0, "男奴"=>0, "女王"=>0, "女奴"=>0);
 foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
-		//$master->recommandee = $master->recommandee . "已停止配对，请在个人资料中重新开启配对<br/>";
-		//update_recommand_db($master);
+		$master->recommandee = $master->recommandee . "已停止配对，请 </br>1）确定在“资源”中贡献3个及以上资源； </br>2）在个人资料中重新开启配对 <br/>具体规则请查看<a style='color:#3ba1da'  href='wp-admin' >仪表盘</a>的圣旨和活动";
+		update_recommand_db($master);
 		continue;
 	}
 	//if matched not enough users this time
 	if($cur_num_match_map[$master->ID] < $master->match_amount){
 		$master->recommandee = $master->recommandee . "暂未找到配对对象，王国已提高你明天的优先级</br>";
-		//update_recommand_db($master);
+		update_recommand_db($master);
 		
 		$tendation = $master->tendation;
 		if(strpos($tendation,"男王") != false){
-			$lack_array["男王"]++;
+			$lack_array["男王"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}else if(strpos($tendation,"男奴") != false){
-			$lack_array["男奴"]++;
+			$lack_array["男奴"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}else if(strpos($tendation,"女王") != false){
-			$lack_array["女王"]++;
+			$lack_array["女王"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}else if(strpos($tendation, "女奴") != false){
-			$lack_array["女奴"]++;
+			$lack_array["女奴"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}
 		
 		continue;
 	}
 }
-//clear_um_cache();
+clear_um_cache();
 
 date_default_timezone_set('Asia/Shanghai');
 echo date("Y-m-d H:i:s") . " 缺少:";
@@ -351,6 +380,7 @@ function is_pare_match_part($master, $candidate){
 
 
 function update_recommand_db($user){
+	/*
 	global $mysqli;
 	$res = $mysqli->query("select * from wp_usermeta where user_id={$user->ID} and meta_key='recommandee'");
 	$res_num = $res->num_rows;
@@ -378,10 +408,11 @@ function update_recommand_db($user){
 			echo "{$user->display_name}} update recommand fail";
 		}
 		//$mysqli->query("update wp_usermeta set meta_value = '{$recommand_str}' where user_id={$user->ID} and meta_key='recommandee'");
-	}
+	}*/
 }
 
 function update_is_match_on_db($user_id, $val){
+/*
 	global $mysqli;
 	$res = $mysqli->query("select * from wp_usermeta where user_id={$user_id} and meta_key='is_match_on'");
 	$res_num = $res->num_rows;
@@ -404,9 +435,12 @@ function update_is_match_on_db($user_id, $val){
 			echo "{$user_id}} update is_match_on fail";
 		}
 	}
+	*/
 }
 
 function clear_um_cache(){
+	/*
 	global $mysqli;
 	$mysqli->query("delete from wp_options where option_name like 'um_cache_userdata_%'");
+	*/
 }

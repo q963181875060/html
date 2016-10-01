@@ -3,4 +3,4 @@ recommand_history.html
 wp-content/uploads/
 .user.ini
 wflogs/
-./wp-content/themes/twentyfifteen/functions.php
+wp-content/themes/twentyfifteen/functions.php

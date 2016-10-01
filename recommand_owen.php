@@ -7,7 +7,7 @@ header("Content-type: text/html; charset=utf-8");
 //Parameters could be changed
 
 //how many days not login, no recommmand for the user
-$no_recommand_login_days = 7;
+$no_recommand_login_days = 3;
 $threshold_for_super_recommand = 5;
 $super_recommand_match_amount = 2;
 $super_recommand_duration_days = 15;
@@ -98,21 +98,21 @@ while($row = $res->fetch_assoc()){
 }
 $res->close();
 
-// Disable the is_match_on if not contribute more than {$low_bound_resource_num} resources
+// Disable the male is_match_on if not contribute more than {$low_bound_resource_num} resources
 $res = $mysqli->query("select wdt_column_2, count(*) count from wp_wpdatatable_1 group by wdt_column_2");
 $potential_legal_ids = array();
 while($row = $res->fetch_assoc()){
 	if($row['count'] >= $low_bound_resource_num){
-		if(array_key_exists($row['wdt_column_2'], $user_map)){
-			$potential_legal_ids[$row['wdt_column_2']] = 1;
+		if(array_key_exists($row['wdt_column_2'], $user_map_key_name)){
+			$potential_legal_ids[$user_map_key_name[$row['wdt_column_2']]['ID']] = 1;
 		}
 	}
 }
 
 foreach($user_map as $key=>$user){
-	if( (!isset($user['is_match_on']) || strpos($user['is_match_on'],"是") != false) && !array_key_exists($key, $potential_legal_ids)){
+	if(strpos($user['gender'],"男") != false && (!isset($user['is_match_on']) || strpos($user['is_match_on'],"是") != false) && !array_key_exists($key, $potential_legal_ids)){
 		$user_map[$key]['is_match_on'] = "a:1:{i:0;s:3:\"否\";}";
-		//update_is_match_on_db($key, "a:1:{i:0;s:3:\"否\";}");
+		update_is_match_on_db($key, "a:1:{i:0;s:3:\"否\";}");
 	}
 }
 $res->close();
@@ -157,12 +157,13 @@ foreach($tmp_user_array as $user){
 	$user_array[] = (object)$user;
 }
 
+
 //First Round Match: same city
 foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
 		continue;
 	}
-	
+		
 	if(!isset($master->match_amount)){
 		$master->match_amount = 1;
 	}
@@ -223,6 +224,7 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
+		//echo "({$master->display_name}, {$candidate->display_name}})<br/>";
 		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
 		update_recommand_db($master);
@@ -294,6 +296,7 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
+		//echo "({$master->display_name}, {$candidate->display_name})<br/>";
 		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
 		update_recommand_db($master);
@@ -318,13 +321,13 @@ foreach($user_array as $master){
 		
 		$tendation = $master->tendation;
 		if(strpos($tendation,"男王") != false){
-			$lack_array["男王"]++;
+			$lack_array["男王"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}else if(strpos($tendation,"男奴") != false){
-			$lack_array["男奴"]++;
+			$lack_array["男奴"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}else if(strpos($tendation,"女王") != false){
-			$lack_array["女王"]++;
+			$lack_array["女王"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}else if(strpos($tendation, "女奴") != false){
-			$lack_array["女奴"]++;
+			$lack_array["女奴"] += ($master->match_amount - $cur_num_match_map[$master->ID]);
 		}
 		
 		continue;
@@ -377,6 +380,7 @@ function is_pare_match_part($master, $candidate){
 
 
 function update_recommand_db($user){
+	
 	global $mysqli;
 	$res = $mysqli->query("select * from wp_usermeta where user_id={$user->ID} and meta_key='recommandee'");
 	$res_num = $res->num_rows;
@@ -391,10 +395,6 @@ function update_recommand_db($user){
 		}else{
 			echo "{$user->display_name}} insert recommand fail";
 		}
-		
-		//$mysqli->query("insert into wp_usermeta (user_id, meta_key, meta_value) values ({$user->ID}, 'recommandee', '{}')");
-		//$q = "insert into wp_usermeta (user_id, meta_key, meta_value) values ({$user->ID}, 'recommandee', '{$recommand_str}')";
-		//echo "insert " . $user->ID . "  " . $q . "<br/>";
 	}else{
 		if ($stmt = $mysqli->prepare("update wp_usermeta set meta_value = ? where user_id= ? and meta_key= ?")) {
 			$stmt->bind_param("sis", $user->recommandee, $user->ID, $recommandee_str);
@@ -403,11 +403,11 @@ function update_recommand_db($user){
 		}else{
 			echo "{$user->display_name}} update recommand fail";
 		}
-		//$mysqli->query("update wp_usermeta set meta_value = '{$recommand_str}' where user_id={$user->ID} and meta_key='recommandee'");
 	}
 }
 
 function update_is_match_on_db($user_id, $val){
+
 	global $mysqli;
 	$res = $mysqli->query("select * from wp_usermeta where user_id={$user_id} and meta_key='is_match_on'");
 	$res_num = $res->num_rows;
@@ -430,9 +430,12 @@ function update_is_match_on_db($user_id, $val){
 			echo "{$user_id}} update is_match_on fail";
 		}
 	}
+	
 }
 
 function clear_um_cache(){
+	
 	global $mysqli;
 	$mysqli->query("delete from wp_options where option_name like 'um_cache_userdata_%'");
+	
 }
