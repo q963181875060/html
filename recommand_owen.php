@@ -11,6 +11,7 @@ $no_recommand_login_days = 7;
 $threshold_for_super_recommand = 5;
 $super_recommand_match_amount = 2;
 $super_recommand_duration_days = 15;
+$low_bound_resource_num = 3;
 
 $mysqli = new mysqli(constant('DB_HOST'),constant('DB_USER'),constant('DB_PASSWORD'), constant('DB_NAME'));
 if ($mysqli->connect_errno) {
@@ -86,7 +87,32 @@ $res = $mysqli->query("select * from wp_usermeta where meta_key='_um_last_login'
 $cur_time = time();
 while($row = $res->fetch_assoc()){
 	if($cur_time - $row['meta_value'] > $no_recommand_login_days * 24 * 60 * 60){
-		update_is_match_on_db($row['user_id'], "a:1:{i:0;s:3:\"否\";}");
+		if(strpos($user_map[$row['user_id']]['is_match_on'],"否") != false){
+			//do nothing
+		}else{
+			$user_map[$row['user_id']]['is_match_on'] = "a:1:{i:0;s:3:\"否\";}";
+			update_is_match_on_db($row['user_id'], "a:1:{i:0;s:3:\"否\";}");
+		}
+		
+	}
+}
+$res->close();
+
+// Disable the is_match_on if not contribute more than {$low_bound_resource_num} resources
+$res = $mysqli->query("select wdt_column_2, count(*) count from wp_wpdatatable_1 group by wdt_column_2");
+$potential_legal_ids = array();
+while($row = $res->fetch_assoc()){
+	if($row['count'] >= $low_bound_resource_num){
+		if(array_key_exists($row['wdt_column_2'], $user_map)){
+			$potential_legal_ids[$row['wdt_column_2']] = 1;
+		}
+	}
+}
+
+foreach($user_map as $key=>$user){
+	if( (!isset($user['is_match_on']) || strpos($user['is_match_on'],"是") != false) && !array_key_exists($key, $potential_legal_ids)){
+		$user_map[$key]['is_match_on'] = "a:1:{i:0;s:3:\"否\";}";
+		//update_is_match_on_db($key, "a:1:{i:0;s:3:\"否\";}");
 	}
 }
 $res->close();
@@ -281,7 +307,7 @@ foreach($user_array as $master){
 $lack_array = array("男王"=>0, "男奴"=>0, "女王"=>0, "女奴"=>0);
 foreach($user_array as $master){
 	if(isset($master->is_match_on) && strpos($master->is_match_on,"否") != false){
-		$master->recommandee = $master->recommandee . "已停止配对，请在个人资料中重新开启配对<br/>";
+		$master->recommandee = $master->recommandee . "已停止配对，请 </br>1）确定在“资源”中贡献3个及以上资源； </br>2）在个人资料中重新开启配对 <br/>具体规则请查看<a style='color:#3ba1da'  href='wp-admin' >仪表盘</a>的圣旨和活动";
 		update_recommand_db($master);
 		continue;
 	}
