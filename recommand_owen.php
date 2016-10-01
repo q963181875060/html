@@ -112,7 +112,6 @@ while($row = $res->fetch_assoc()){
 foreach($user_map as $key=>$user){
 	if(strpos($user['gender'],"男") != false && (!isset($user['is_match_on']) || strpos($user['is_match_on'],"是") != false) && !array_key_exists($key, $potential_legal_ids)){
 		$user_map[$key]['is_match_on'] = "a:1:{i:0;s:3:\"否\";}";
-		update_is_match_on_db($key, "a:1:{i:0;s:3:\"否\";}");
 	}
 }
 $res->close();

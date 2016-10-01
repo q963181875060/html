@@ -224,7 +224,7 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
-		//echo "({$master->display_name}, {$candidate->display_name}})<br/>";
+		echo "({$master->display_name}, {$candidate->display_name}})<br/>";
 		//$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
 		update_recommand_db($master);
@@ -296,7 +296,7 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
-		//echo "({$master->display_name}, {$candidate->display_name})<br/>";
+		echo "({$master->display_name}, {$candidate->display_name})<br/>";
 		//$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
 		update_recommand_db($master);
