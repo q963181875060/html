@@ -13,6 +13,14 @@ $super_recommand_match_amount = 2;
 $super_recommand_duration_days = 15;
 $low_bound_resource_num = 3;
 
+
+
+$only_output = false;
+if($_GET['mode'] == "only_output"){
+	$only_output = true;
+}
+
+
 $mysqli = new mysqli(constant('DB_HOST'),constant('DB_USER'),constant('DB_PASSWORD'), constant('DB_NAME'));
 if ($mysqli->connect_errno) {
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
@@ -28,11 +36,13 @@ if(!$mysqli->query("use " . constant('DB_NAME'))){
 $res = $mysqli->query("SELECT * FROM wp_users");
 $user_map = array();
 $user_map_key_name = array();
+$user_map_nickname = array();
 //cur_num_match_map is to store how many matches already done for this user this time
 $cur_num_match_map = array();
 while($row = $res->fetch_assoc()){
 	$user_map[$row['ID']] = $row;
 	$user_map_key_name[$row['user_login']] = $row;
+	$user_map_nickname[$row['display_name']] = $row;
 	$user_map[$row['ID']]['recommandee'] = "";
 	$cur_num_match_map[$row['ID']]=0;
 }
@@ -61,7 +71,8 @@ foreach($potential_super_recommand_user_ids as $id){
 	if(!isset($user_map[$id]['super_recommand_start_time'])){
 			$user_map[$id]['match_amount'] = $super_recommand_match_amount;
 			$user_map[$id]['super_recommand_start_time'] = time();
-			$mysqli->query("insert into wp_usermeta (user_id, meta_key, meta_value) values ({$id}, 'super_recommand_start_time', '{$user_map[$id]['super_recommand_start_time']}')");
+			if(!$only_output)
+				$mysqli->query("insert into wp_usermeta (user_id, meta_key, meta_value) values ({$id}, 'super_recommand_start_time', '{$user_map[$id]['super_recommand_start_time']}')");
 			$should_be_update = 1;
 	}else{
 		if(time() - $user_map[$id]['super_recommand_start_time'] > $super_recommand_duration_days * 24 * 60 * 60){
@@ -78,7 +89,8 @@ foreach($potential_super_recommand_user_ids as $id){
 	}
 	if($should_be_update == 1){
 		//update match_amount
-		$mysqli->query("update wp_usermeta set meta_value = '{$user_map[$id]['match_amount']}' where user_id={$id} and meta_key='match_amount'");
+		if(!$only_output)
+			$mysqli->query("update wp_usermeta set meta_value = '{$user_map[$id]['match_amount']}' where user_id={$id} and meta_key='match_amount'");
 	}	
 }
 
@@ -86,7 +98,7 @@ foreach($potential_super_recommand_user_ids as $id){
 $res = $mysqli->query("select * from wp_usermeta where meta_key='_um_last_login'");
 $cur_time = time();
 while($row = $res->fetch_assoc()){
-	if($cur_time - $row['meta_value'] > $no_recommand_login_days * 24 * 60 * 60){
+	if($cur_time - $row['meta_value'] > $no_recommand_login_days * 24 * 60 * 60 && strpos($user_map[$row['user_id']]['gender'],"男") != false){
 		if(strpos($user_map[$row['user_id']]['is_match_on'],"否") != false){
 			//do nothing
 		}else{
@@ -106,12 +118,17 @@ while($row = $res->fetch_assoc()){
 		if(array_key_exists($row['wdt_column_2'], $user_map_key_name)){
 			$potential_legal_ids[$user_map_key_name[$row['wdt_column_2']]['ID']] = 1;
 		}
+		if(array_key_exists($row['wdt_column_2'], $user_map_nickname)){
+			$potential_legal_ids[$user_map_nickname[$row['wdt_column_2']]['ID']] = 1;
+		}
 	}
 }
 
 foreach($user_map as $key=>$user){
 	if(strpos($user['gender'],"男") != false && (!isset($user['is_match_on']) || strpos($user['is_match_on'],"是") != false) && !array_key_exists($key, $potential_legal_ids)){
 		$user_map[$key]['is_match_on'] = "a:1:{i:0;s:3:\"否\";}";
+		if(!$only_output) 
+			update_is_match_on_db($key, "a:1:{i:0;s:3:\"否\";}");
 	}
 }
 $res->close();
@@ -223,8 +240,9 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
-		//echo "({$master->display_name}, {$candidate->display_name}})<br/>";
-		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
+		echo "({$master->display_name}, {$candidate->display_name}})<br/>";
+		if(!$only_output)
+			$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
 		update_recommand_db($master);
 		update_recommand_db($candidate);
@@ -295,8 +313,9 @@ foreach($user_array as $master){
 		$candidate->recommandee = $candidate->recommandee . "<a style='color:#3ba1da' href='?page_id=8&um_user={$master->user_login}'>{$master->display_name}</a>   联系方式：{$master->contact} <br/>";
 		
 		$time = time();
-		//echo "({$master->display_name}, {$candidate->display_name})<br/>";
-		$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
+		echo "({$master->display_name}, {$candidate->display_name})<br/>";
+		if(!$only_output)
+			$mysqli->query("insert into wp_recommand_owen (master_id, candidate_id, time) values ({$master->ID}, {$candidate->ID}, {$time}),({$candidate->ID}, {$master->ID}, {$time})");
 		
 		update_recommand_db($master);
 		update_recommand_db($candidate);
@@ -332,7 +351,8 @@ foreach($user_array as $master){
 		continue;
 	}
 }
-clear_um_cache();
+if(!$only_output)
+	clear_um_cache();
 
 date_default_timezone_set('Asia/Shanghai');
 echo date("Y-m-d H:i:s") . " 缺少:";
@@ -379,7 +399,6 @@ function is_pare_match_part($master, $candidate){
 
 
 function update_recommand_db($user){
-	
 	global $mysqli;
 	$res = $mysqli->query("select * from wp_usermeta where user_id={$user->ID} and meta_key='recommandee'");
 	$res_num = $res->num_rows;
@@ -406,7 +425,6 @@ function update_recommand_db($user){
 }
 
 function update_is_match_on_db($user_id, $val){
-
 	global $mysqli;
 	$res = $mysqli->query("select * from wp_usermeta where user_id={$user_id} and meta_key='is_match_on'");
 	$res_num = $res->num_rows;
@@ -429,12 +447,9 @@ function update_is_match_on_db($user_id, $val){
 			echo "{$user_id}} update is_match_on fail";
 		}
 	}
-	
 }
 
 function clear_um_cache(){
-	
 	global $mysqli;
 	$mysqli->query("delete from wp_options where option_name like 'um_cache_userdata_%'");
-	
 }

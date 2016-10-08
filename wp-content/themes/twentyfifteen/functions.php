@@ -74,8 +74,12 @@ function remove_website_row_wpse_94963_css()
 add_action( 'admin_head-user-edit.php', 'remove_website_row_wpse_94963_css' );
 add_action( 'admin_head-profile.php',   'remove_website_row_wpse_94963_css' );
 
+
 function wpse120418_unregister_categories() {
-    register_taxonomy( 'category', array() );
+	if(!current_user_can('administrator'))//not and admin
+	{
+		register_taxonomy( 'category', array() );
+	}
 }
 add_action( 'init', 'wpse120418_unregister_categories' );
 
@@ -92,9 +96,9 @@ add_action( 'admin_bar_menu', 'wpdocs_remove_logo_comments', 999 );
 add_action('admin_head','admin_css');
 function admin_css()
 {
-if(!current_user_can('administrator'))//not and admin
-{
-    echo '<style>';
+	if(!current_user_can('administrator'))//not and admin
+	{
+		echo '<style>';
         echo '.update_nag{display:none}';
         echo '</style>';
     }
@@ -102,7 +106,10 @@ if(!current_user_can('administrator'))//not and admin
 
 // Remove tags support from posts
 function myprefix_unregister_tags() {
-    unregister_taxonomy_for_object_type('post_tag', 'post');
+	if(!current_user_can('administrator'))//not and admin
+	{
+		unregister_taxonomy_for_object_type('post_tag', 'post');
+	}
 }
 add_action('init', 'myprefix_unregister_tags');
 
@@ -187,6 +194,7 @@ function myplugin_restrict_registration($user_id) {
   }
   
   $is_limit_on = false;
+  //$is_limit_on = true;
   if($female_num >= 50 && $male_num > $female_num*2){
 	$is_limit_on = true;  
   }
@@ -198,6 +206,29 @@ function myplugin_restrict_registration($user_id) {
   }
 }
 add_action( 'user_register', 'myplugin_restrict_registration', 1, 1);
+
+
+// Only the posts by admin could show at home page
+add_action( 'pre_get_posts', 'rc_modify_query_get_design_projects' );
+function rc_modify_query_get_design_projects( $query ) {
+ 
+	// Check if on frontend and main query is modified
+	if( ! is_admin() && $query->is_main_query() && ! $query->get( 'tag' )) {
+		$query->set( 'tag', 'admin-only' );
+	}
+ 
+}
+
+//hide previous and next post navigation bar
+function next_posts_link_css ( $content ) {
+    return 'style="display:none"';
+}
+add_filter( 'next_posts_link_attributes', 'next_posts_link_css' );
+
+function previous_posts_link_css ( $content ) {
+    return 'style="display:none"';
+}
+add_filter( 'previous_posts_link_attributes', 'previous_posts_link_css' );
 /******owen***********
 
 
